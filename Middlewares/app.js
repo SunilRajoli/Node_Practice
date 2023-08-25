@@ -1,14 +1,27 @@
+
 const express = require('express')
-const myMiddleware = require('./Middlewares/middle')
+
+//third party middlewares
+const morgan = require('morgan')
+const cookieParser = require('cookie-parser')
 
 const app = express()
 
+app.use(morgan('tiny'))
+
+app.use(cookieParser())
+
+//Middlewares
+
 app.use(express.json())
 
-app.use(myMiddleware)
+app.use((req, res, next) => {
+    console.log('This is a custom middleware')
+    next()
+})
 
 app.use((req, res, next) => {
-    console.log('This is second middleware')
+    console.log('This is a second middleware')
     next()
 })
 
@@ -18,26 +31,12 @@ const courses = [
     {id:3, name : 'Java'},
 ]
 
-//get, post, update, delete
+
+//Route parameters
 
 app.get('/courses', (req, res) => {
     res.send(courses)
 })
-
-
-app.get('/', (req, res) => {
-    res.send('Hello Its working...')
-})
-
-app.get('/about', (req, res) => {
-    res.send('We created another response')
-})
-
-app.get('/contact', (req, res) => {
-    res.send('We created contact response')
-})
-
-//Route parameters
 
 /*
 app.get('/courses/:id', (req, res) => {
